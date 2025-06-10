@@ -73,6 +73,7 @@
     <dimen name="font_size_30">30sp</dimen>
 
 
+    <dimen name="cardCornerRadius8">8dp</dimen>
 
 
 
