@@ -8,11 +8,11 @@ plugins {
 
 
 android {
-    namespace = "com.plantapphubx"
+    namespace = "com.imagetovideoapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.plantapphubx"
+        applicationId = "com.imagetovideoapp"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
