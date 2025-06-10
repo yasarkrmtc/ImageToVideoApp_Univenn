@@ -1,0 +1,30 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    id: String
+}
+
+type Mutation {
+    img2Video(image: Upload!, prompt: String): PredictResponse
+}
+
+scalar Upload
+
+
+type VideoJob {
+    id: String
+    status: String
+}
+
+type PredictResponse {
+    status: String
+}
+
+type Video {
+    id: String
+    url: String
+    thumbnail: String
+}

@@ -1,9 +1,16 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.apollographql.apollo") version "4.0.0"
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs")
     kotlin("kapt")
+}
+apollo {
+    service("service") {
+        packageName.set("com.imagetovideoapp")
+        mapScalarToUpload("Upload")
+    }
 }
 
 
@@ -90,17 +97,17 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-compiler:2.50")
 
+    implementation("io.coil-kt:coil:2.4.0")
+
+
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.apollographql.apollo:apollo-runtime")
+    implementation("com.apollographql.apollo:apollo-api")
 
-    // Room
-    implementation("androidx.room:room-runtime:2.5.0")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.room:room-rxjava2:2.6.1")
-    implementation("androidx.room:room-rxjava3:2.6.1")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
 
 }
+
