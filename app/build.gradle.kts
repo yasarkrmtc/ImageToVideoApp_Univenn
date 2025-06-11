@@ -10,8 +10,10 @@ apollo {
     service("service") {
         packageName.set("com.imagetovideoapp")
         mapScalarToUpload("Upload")
+        schemaFile.set(file("src/main/graphql/com/imagetovideoapp/schema.graphqls"))
     }
 }
+
 
 
 android {

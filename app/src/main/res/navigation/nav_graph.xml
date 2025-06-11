@@ -8,24 +8,31 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.imagetovideoapp.ui.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_generatingFragment"
             app:destination="@id/generatingFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/generatingFragment"
         android:name="com.imagetovideoapp.ui.generating.GeneratingFragment"
-        android:label="fragment_generating"
-        tools:layout="@layout/fragment_generating" >
+        tools:layout="@layout/fragment_generating">
         <action
             android:id="@+id/action_generatingFragment_to_imageToVideoFragment"
             app:destination="@id/imageToVideoFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/imageToVideoFragment"
         android:name="com.imagetovideoapp.ui.imagetovideo.ImageToVideoFragment"
-        android:label="fragment_image_to_video"
-        tools:layout="@layout/fragment_image_to_video" />
+        tools:layout="@layout/fragment_image_to_video">
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
