@@ -3,6 +3,7 @@ package com.imagetovideoapp.ui.home
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.imagetovideoapp.domain.repository.VideoGenerationResult
 import com.imagetovideoapp.domain.usecase.GenerateVideoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,8 +16,8 @@ class HomeViewModel @Inject constructor(
     private val generateVideoUseCase: GenerateVideoUseCase
 ) : ViewModel() {
 
-    private val _videoId = MutableSharedFlow<String>(replay = 0)
-    val videoId: SharedFlow<String> = _videoId
+    private val _videoId = MutableSharedFlow<VideoGenerationResult>()
+    val videoId: SharedFlow<VideoGenerationResult> = _videoId
 
     fun generateVideo(imageUri: Uri, prompt: String?) {
         viewModelScope.launch {

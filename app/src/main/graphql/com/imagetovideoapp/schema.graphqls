@@ -3,28 +3,66 @@ schema {
     mutation: Mutation
 }
 
-type Query {
-    id: String
-}
-
 type Mutation {
-    img2Video(image: Upload!, prompt: String): PredictResponse
+    img2Video(image: Upload, prompt: String): PredictResponse!
 }
 
-scalar Upload
-
-
-type VideoJob {
-    id: String
-    status: String
+type Query {
+    getPredictStatus(videoId: String!): StatusCheckResponse!
+    getUserVideos(status: StatusEnum): [Video!]!
 }
+
+# Required types for the exposed operations
 
 type PredictResponse {
     status: String
+    video: Video
+}
+
+type StatusCheckResponse {
+    progress: Int!
+    status: StatusEnum!
 }
 
 type Video {
-    id: String
+    duration: Int
+    errorReason: String
+    id: ID!
+    inputImageUrl: String
+    progressRatio: Int
+    prompt: String
+    status: StatusEnum!
+    thumbnailUrl: String
     url: String
-    thumbnail: String
+    userId: String
 }
+
+type User {
+    id: ID!
+    totalCredit: TotalCredit!
+    videos: [Video!]!
+}
+
+type TotalCredit {
+    dailyCredit: Int!
+    total: Int!
+}
+
+# Required enums
+
+enum StatusEnum {
+    FAILED
+    IN_QUE
+    PENDING
+    RUNNING
+    SUCCEEDED
+    THROTTLED
+}
+
+
+# Required scalars
+"The javascript `Date` as string. Type represents date and time as the ISO Date string."
+scalar DateTime
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload

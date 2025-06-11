@@ -1,5 +1,9 @@
 mutation Img2Video($image: Upload!, $prompt: String) {
   img2Video(image: $image, prompt: $prompt) {
     status
+    video {
+      id
+      status
+    }
   }
 }
