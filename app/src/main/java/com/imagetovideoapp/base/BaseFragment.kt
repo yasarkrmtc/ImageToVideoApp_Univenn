@@ -1,5 +1,6 @@
 package com.imagetovideoapp.base
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,5 +28,19 @@ open class BaseFragment<VB : ViewBinding?>(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun showAlert(message: String) {
+        activity?.let { context ->
+            val dialog = AlertDialog.Builder(context)
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+
+            dialog.show()
+        }
     }
 }

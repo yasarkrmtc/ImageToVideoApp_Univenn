@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.repository.StatusUiModel
+import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.domain.usecase.GetPredictStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,17 +18,46 @@ class GeneratingViewModel @Inject constructor(
     private val getPredictStatusUseCase: GetPredictStatusUseCase
 ) : ViewModel() {
 
-    private val _progress = MutableSharedFlow<StatusUiModel>()
-    val progress: SharedFlow<StatusUiModel> = _progress
+    private val _progress = MutableSharedFlow<BaseResponse<StatusUiModel>>()
+    val progress: SharedFlow<BaseResponse<StatusUiModel>> = _progress
 
     fun startPolling(videoId: String) {
-        Log.e("qqqqqqqq55555" ,videoId)
+        Log.e("GeneratingViewModel", "Polling started for video ID: $videoId")
         viewModelScope.launch {
-            while (true) {
-                val result = getPredictStatusUseCase(videoId)
-                result?.let { _progress.emit(it) }
-                if (result?.status == "SUCCEEDED" || result?.status == "FAILED") break
-                delay(2000) // Wait before polling again
+            _progress.emit(BaseResponse.Loading) // Emit loading state initially
+
+            try {
+                var isSuccess = false
+                while (!isSuccess) {
+                    getPredictStatusUseCase(videoId).collect { result ->
+                        when (result) {
+                            is BaseResponse.Success -> {
+                                Log.e("qqqqqqq333",result.data.toString())
+                                val status = result.data.status
+                                val progress = result.data.progress
+                                _progress.emit(BaseResponse.Success(result.data))
+                                if (status == "SUCCEEDED") {
+                                    isSuccess = true
+                                }
+                                if (progress in 0..100) {
+                                    _progress.emit(BaseResponse.Success(result.data))
+                                }
+                            }
+                            is BaseResponse.Error -> {
+                                _progress.emit(BaseResponse.Error(result.exception))
+                                isSuccess = true
+                            }
+                            else -> {
+                                val errorMessage = "Video generation failed"
+                                _progress.emit(BaseResponse.Error(Exception(errorMessage)))
+                                isSuccess = true
+                            }
+                        }
+                    }
+                    delay(1000)
+                }
+            } catch (e: Exception) {
+                _progress.emit(BaseResponse.Error(e))
             }
         }
     }

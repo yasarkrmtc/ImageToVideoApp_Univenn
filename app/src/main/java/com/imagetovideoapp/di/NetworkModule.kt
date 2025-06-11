@@ -2,6 +2,7 @@ package com.imagetovideoapp.di
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.network.okHttpClient
+import com.imagetovideoapp.utils.CustomHttpLogger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val logging = HttpLoggingInterceptor().apply {
+        val logging = HttpLoggingInterceptor(CustomHttpLogger()).apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
 

@@ -15,8 +15,10 @@ import coil.load
 import clickWithDebounce
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentHomeBinding
+import com.imagetovideoapp.domain.state.BaseResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -24,35 +26,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val viewModel: HomeViewModel by viewModels()
     private var selectedImageUri: Uri? = null
 
-
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
-            binding.uploadImage.load(it)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListeners()
-        collectFlows()
-
-        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
-
-        requireActivity().window.statusBarColor = android.graphics.Color.TRANSPARENT
-        requireActivity().window.navigationBarColor = android.graphics.Color.TRANSPARENT
-
-        WindowCompat.getInsetsController(requireActivity().window, view)?.apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
-
-
-
+        initListeners()
+        initObservers()
     }
 
 
-    private fun setupListeners() {
+    private fun initListeners() {
         binding.uploadArea.clickWithDebounce {
             pickImageLauncher.launch("image/*")
         }
@@ -65,12 +46,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    private fun collectFlows() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.videoId.collectLatest { videoId ->
-                val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoId.id)
-                findNavController().navigate(action)
+    private fun initObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.viewState.collect { response ->
+                when (response) {
+                    is BaseResponse.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is BaseResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        val videoGenerationResult = response.data
+                        val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoGenerationResult.id)
+                        findNavController().navigate(action)
+                    }
+                    is BaseResponse.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        showAlert(response.exception.message ?: "An unknown error occurred.")
+                    }
+                }
             }
+        }
+    }
+
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            binding.uploadImage.load(it)
         }
     }
 }

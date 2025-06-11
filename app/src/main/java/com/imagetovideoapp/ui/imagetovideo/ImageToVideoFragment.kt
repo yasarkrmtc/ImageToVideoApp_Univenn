@@ -9,12 +9,16 @@ import android.widget.SeekBar
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.imagetovideoapp.R
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentImageToVideoBinding
+import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.type.StatusEnum
+import com.imagetovideoapp.ui.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -26,39 +30,40 @@ class ImageToVideoFragment :
     private var mediaPlayer: MediaPlayer? = null
     private var isPlaying = false
     private var timer: Timer? = null
+    private var videoId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchUserVideos(StatusEnum.SUCCEEDED)
-        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
-        requireActivity().window.statusBarColor = android.graphics.Color.TRANSPARENT
-        requireActivity().window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        WindowCompat.getInsetsController(requireActivity().window, view)?.apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
         initObservers()
-
-        setupVideoView()
-        setupControls()
         setupClickListeners()
     }
 
-    private fun initObservers(){
-            lifecycleScope.launchWhenStarted {
-                viewModel.userVideos.collectLatest { videos ->
-
-                    Log.e("cccccccc",videos.toString())
-                    if (videos.isNotEmpty()) {
-                    } else {
-                        binding.videoDescription.text = "No videos available"
+    private fun initObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.userVideos.collect { response ->
+                when (response) {
+                    is BaseResponse.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is BaseResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        val video = response.data.find { it.id == videoId }
+                        video?.url?.let { setupVideoView(it) }
+                        setupControls()
+                    }
+                    is BaseResponse.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        showAlert(response.exception.message ?: "An unknown error occurred.")
                     }
                 }
             }
+        }
     }
 
-    private fun setupVideoView() {
-        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/sample_video") // örnek video
+
+    private fun setupVideoView(videoUrl: String) {
+        val videoUri = Uri.parse(videoUrl)  // Parse the URL to URI
 
         binding.videoView.setVideoURI(videoUri)
         binding.videoView.setOnPreparedListener {
@@ -71,6 +76,7 @@ class ImageToVideoFragment :
             }
         }
     }
+
 
     private fun setupControls() {
         binding.playPauseButton.setOnClickListener {
@@ -121,11 +127,9 @@ class ImageToVideoFragment :
         }
 
         binding.shareButton.setOnClickListener {
-            // Share logic goes here
         }
 
         binding.uploadButton.setOnClickListener {
-            // Upload logic goes here
         }
     }
 

@@ -9,39 +9,49 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentGeneratingBinding
+import com.imagetovideoapp.domain.state.BaseResponse
+import com.imagetovideoapp.type.StatusEnum
 import com.imagetovideoapp.ui.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GeneratingFragment :
     BaseFragment<FragmentGeneratingBinding>(FragmentGeneratingBinding::inflate) {
 
     private val viewModel: GeneratingViewModel by viewModels()
+    private var videoId :String?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
-        requireActivity().window.statusBarColor = android.graphics.Color.TRANSPARENT
-        requireActivity().window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
-        WindowCompat.getInsetsController(requireActivity().window, view)?.apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
-        val videoId = arguments?.getString("id") ?: return
-        viewModel.startPolling(videoId)
+        videoId = arguments?.getString("id") ?: return
+        viewModel.startPolling(videoId!!)
         observeProgress()
     }
 
     private fun observeProgress() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.progress.collectLatest { status ->
-                binding.progressBar.progress = status.progress
-                if (status.status == "SUCCEEDED") {
-                    val action = GeneratingFragmentDirections.actionGeneratingFragmentToImageToVideoFragment()
-                    findNavController().navigate(action)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.progress.collect { response ->
+                when (response) {
+                    is BaseResponse.Loading -> {
+                    }
+                    is BaseResponse.Success -> {
+                        Log.e("qqqqqqq1111",response.data.toString())
+                        val videoGenerationResult = response.data
+                        val progress = videoGenerationResult.progress
+                        binding.progressBar.progress = progress
+                        if (progress == 100) {
+                            Log.e("qqqqqqq222",response.data.toString())
+                            val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoId!!)
+                            findNavController().navigate(action)
+                        }
+                    }
+                    is BaseResponse.Error -> {
+                        showAlert(response.exception.message ?: "An unknown error occurred.")
+                    }
                 }
             }
         }

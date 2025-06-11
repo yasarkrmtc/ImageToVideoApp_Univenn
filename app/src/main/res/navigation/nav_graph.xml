@@ -31,6 +31,9 @@
         android:name="com.imagetovideoapp.ui.imagetovideo.ImageToVideoFragment"
         tools:layout="@layout/fragment_image_to_video">
 
+        <argument
+            android:name="videoId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

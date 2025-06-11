@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.repository.UserVideo
+import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.domain.usecase.GetUserVideosUseCase
 import com.imagetovideoapp.type.StatusEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,17 +19,30 @@ class ImageToVideoViewModel @Inject constructor(
     private val getUserVideosUseCase: GetUserVideosUseCase
 ) : AndroidViewModel(application) {
 
-    private val _userVideos = MutableSharedFlow<List<UserVideo>>()
-    val userVideos: SharedFlow<List<UserVideo>> = _userVideos
+    private val _userVideos = MutableSharedFlow<BaseResponse<List<UserVideo>>>()
+    val userVideos: SharedFlow<BaseResponse<List<UserVideo>>> = _userVideos
 
     fun fetchUserVideos(status: StatusEnum? = null) {
         viewModelScope.launch {
+            _userVideos.emit(BaseResponse.Loading)
+
             try {
-                val videos = getUserVideosUseCase(status)
-                _userVideos.emit(videos)
+                getUserVideosUseCase(status).collect { result ->
+                    when (result) {
+                        is BaseResponse.Success -> {
+                            _userVideos.emit(BaseResponse.Success(result.data))
+                        }
+
+                        is BaseResponse.Error -> {
+                            _userVideos.emit(BaseResponse.Error(result.exception))
+                        }
+
+                        else -> {
+                        }
+                    }
+                }
             } catch (e: Exception) {
-                // Handle error if needed
-                _userVideos.emit(emptyList()) // Empty list on error
+                _userVideos.emit(BaseResponse.Error(e)) // In case of error, emit an error response
             }
         }
     }
