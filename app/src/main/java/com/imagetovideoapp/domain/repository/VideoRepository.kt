@@ -4,7 +4,10 @@ import android.util.Log
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.DefaultUpload
 import com.apollographql.apollo.api.Optional
+import com.imagetovideoapp.GetPredictStatusQuery
+import com.imagetovideoapp.GetUserVideosQuery
 import com.imagetovideoapp.Img2VideoMutation
+import com.imagetovideoapp.type.StatusEnum
 import okio.source
 import java.io.File
 import javax.inject.Inject
@@ -43,5 +46,35 @@ class VideoRepository @Inject constructor(
         } else {
             null
         }
+    }
+    suspend fun getPredictStatus(videoId: String): StatusUiModel? {
+        val response = apolloClient.query(GetPredictStatusQuery(videoId)).execute()
+        val statusData = response.data?.getPredictStatus
+
+        return statusData?.let {
+            StatusUiModel(
+                progress = it.progress,
+                status = it.status.name,
+                videoUrl = "https://videoai-api.univenn.com/output/$videoId.mp4",
+                description = "Video oluşturuluyor..."
+            )
+        }
+    }
+
+    suspend fun getUserVideos(status: StatusEnum?): List<UserVideo> {
+        val query = GetUserVideosQuery(status = Optional.presentIfNotNull(status))
+        val response = apolloClient.query(query).execute()
+        val videos = response.data?.getUserVideos
+
+        return videos?.map {
+            UserVideo(
+                id = it.id,
+                url = it.url ?: "",
+                status = it.status.name,
+                prompt = it.prompt,
+                thumbnailUrl = it.thumbnailUrl,
+                duration = it.duration ?: 0
+            )
+        } ?: emptyList()
     }
 }

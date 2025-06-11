@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import clickWithDebounce
 import com.imagetovideoapp.base.BaseFragment
@@ -67,7 +68,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun collectFlows() {
         lifecycleScope.launchWhenStarted {
             viewModel.videoId.collectLatest { videoId ->
-                Toast.makeText(requireContext(), "Video ID: $videoId", Toast.LENGTH_SHORT).show()
+                val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoId.id)
+                findNavController().navigate(action)
             }
         }
     }

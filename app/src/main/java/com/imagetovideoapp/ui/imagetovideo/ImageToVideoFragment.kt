@@ -3,21 +3,25 @@ package com.imagetovideoapp.ui.imagetovideo
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.imagetovideoapp.R
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentImageToVideoBinding
+import com.imagetovideoapp.type.StatusEnum
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 
 @AndroidEntryPoint
 class ImageToVideoFragment :
     BaseFragment<FragmentImageToVideoBinding>(FragmentImageToVideoBinding::inflate) {
 
-  //  private val viewModel: ImageToVideoViewModel by viewModels()
+    private val viewModel: ImageToVideoViewModel by viewModels()
 
     private var mediaPlayer: MediaPlayer? = null
     private var isPlaying = false
@@ -25,8 +29,7 @@ class ImageToVideoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Edge-to-edge immersive UI
+        viewModel.fetchUserVideos(StatusEnum.SUCCEEDED)
         WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
         requireActivity().window.statusBarColor = android.graphics.Color.TRANSPARENT
         requireActivity().window.navigationBarColor = android.graphics.Color.TRANSPARENT
@@ -34,10 +37,24 @@ class ImageToVideoFragment :
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
+        initObservers()
 
         setupVideoView()
         setupControls()
         setupClickListeners()
+    }
+
+    private fun initObservers(){
+            lifecycleScope.launchWhenStarted {
+                viewModel.userVideos.collectLatest { videos ->
+
+                    Log.e("cccccccc",videos.toString())
+                    if (videos.isNotEmpty()) {
+                    } else {
+                        binding.videoDescription.text = "No videos available"
+                    }
+                }
+            }
     }
 
     private fun setupVideoView() {

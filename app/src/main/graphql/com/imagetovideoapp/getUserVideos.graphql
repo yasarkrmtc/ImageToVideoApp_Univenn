@@ -1,0 +1,10 @@
+query GetUserVideos($status: StatusEnum) {
+    getUserVideos(status: $status) {
+        id
+        url
+        status
+        prompt
+        thumbnailUrl
+        duration
+    }
+}

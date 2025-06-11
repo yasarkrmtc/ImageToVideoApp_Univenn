@@ -21,18 +21,16 @@
         <action
             android:id="@+id/action_generatingFragment_to_imageToVideoFragment"
             app:destination="@id/imageToVideoFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/imageToVideoFragment"
         android:name="com.imagetovideoapp.ui.imagetovideo.ImageToVideoFragment"
         tools:layout="@layout/fragment_image_to_video">
-        <argument
-            android:name="videoUrl"
-            app:argType="string" />
-        <argument
-            android:name="description"
-            app:argType="string" />
+
     </fragment>
 
 </navigation>
