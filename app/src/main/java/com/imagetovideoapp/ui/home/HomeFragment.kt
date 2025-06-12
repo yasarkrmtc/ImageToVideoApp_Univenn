@@ -1,7 +1,9 @@
 package com.imagetovideoapp.ui.home
 
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -11,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
 import clickWithDebounce
+import com.imagetovideoapp.R
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentHomeBinding
 import com.imagetovideoapp.utils.Constants
@@ -21,7 +24,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
     private val viewModel: HomeViewModel by viewModels()
-    private var selectedImageUri: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,47 +33,78 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
 
     private fun initListeners() {
-        binding.uploadArea.clickWithDebounce {
-            pickImageLauncher.launch(Constants.IMAGE_PICKER_TYPE)
-        }
-
-        binding.generateButton.setOnClickListener {
-            val prompt = binding.promptEditText.text?.toString()
-            selectedImageUri?.let {
-                viewModel.generateVideo(it, prompt)
+        binding.apply {
+            uploadArea.clickWithDebounce {
+                pickImageLauncher.launch(Constants.IMAGE_PICKER_TYPE)
+            }
+            generateButton.clickWithDebounce {
+                val prompt = binding.promptEditText.text?.toString()
+                viewModel.viewState.value.selectedImage?.let {
+                    viewModel.generateVideo(it, prompt)
+                }
+            }
+            closeButton.clickWithDebounce {
+                viewModel.deleteImage()
             }
         }
+
     }
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { viewState ->
-                    if (viewState.errorMessage != null) {
-                        binding.progressBar.visibility = View.GONE
-                        val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment("cmbrz6b1l3dgz2mn7trxmff1o")
-                        findNavController().navigate(action)
-                        //showAlert(response.exception.message ?: Constants.ALERT_UNKNOWN_ERROR_MESSAGE)
+                    binding.progressBar.visibility =if (viewState.isLoading) View.VISIBLE else View.GONE
+                    Log.e("ress","viesState : $viewState")
+                     if (!viewState.errorMessage.isNullOrEmpty()) {
+                        showAlert(viewState.errorMessage)
                     } else {
-                        viewState.isLoading?.let {
-                            binding.progressBar.visibility = View.VISIBLE
+                        viewState.selectedImage?.let {
+                            binding.apply {
+                                closeButton.visibility = View.VISIBLE
+                                checkIcon.visibility = View.VISIBLE
+                                uploadImage.load(it)
+                                uploadText.apply {
+                                    text = getText(R.string.uploaded)
+                                    textSize = 12f
+                                }
+                            }
+                        }?:also {
+                            binding.apply {
+                                closeButton.visibility = View.GONE
+                                checkIcon.visibility = View.GONE
+                                uploadImage.load(R.drawable.upload_icon)
+                                uploadText.apply {
+                                    text = getText(R.string.tap_here_to_upload_image)
+                                    textSize = 16f
+                                }
+                            }
                         }
+
                         viewState.item?.let { demoResponses ->
                             binding.progressBar.visibility = View.GONE
                             val videoGenerationResult = demoResponses
-                            val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoGenerationResult.id)
+                            val action =
+                                HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(
+                                    videoGenerationResult.id
+                                )
                             findNavController().navigate(action)
                         }
+                    }
                     }
                 }
             }
         }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.resetState()
     }
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
-            binding.uploadImage.load(it)
-        }
+
+        private val pickImageLauncher =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                uri?.let {
+                    viewModel.setSelectedImage(it)
+                }
+            }
     }
-}

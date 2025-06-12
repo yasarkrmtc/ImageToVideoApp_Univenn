@@ -37,6 +37,17 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("boolean", "USE_FAKE_REPO", "false")
+        }
+        debug {
+            buildConfigField("boolean", "USE_FAKE_REPO", "false")
+        }
+        create("myTest") {
+            initWith(getByName("debug"))
+            manifestPlaceholders["hostName"] = "internal.example.com"
+            applicationIdSuffix = ".debugStaging"
+            buildConfigField("boolean", "USE_FAKE_REPO", "true")
+
         }
     }
     compileOptions {
@@ -48,6 +59,8 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+
     }
 }
 
@@ -68,10 +81,10 @@ dependencies {
 
 
     // Unit test
-    testImplementation ("junit:junit:4.13.2")
-    testImplementation ("org.mockito:mockito-core:3.11.2")
-    testImplementation ("androidx.test.ext:junit:1.2.1")
-    testImplementation ("androidx.test:core:1.6.1")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:3.11.2")
+    testImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("androidx.test:core:1.6.1")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -107,8 +120,6 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.apollographql.apollo:apollo-runtime")
     implementation("com.apollographql.apollo:apollo-api")
-
-
 
 
 }

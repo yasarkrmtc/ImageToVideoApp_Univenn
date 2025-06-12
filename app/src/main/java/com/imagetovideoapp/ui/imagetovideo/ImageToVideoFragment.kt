@@ -44,15 +44,9 @@ class ImageToVideoFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { viewState ->
                     if (viewState.errorMessage != null) {
-                        binding.progressBar.visibility = View.GONE
-                        val url ="https://video-uploads.univenn.com/video/sF8Mz-uoDAnXpKMPieDy4.mp4"
-                        url.let { setupVideoView(it) }
-                        setupControls()
-                       // showAlert(viewState.errorMessage)
+                        showAlert(viewState.errorMessage)
                     } else {
-                        viewState.isLoading?.let {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
+
                         viewState.itemList?.let { demoResponses ->
                             binding.progressBar.visibility = View.GONE
                             val video = demoResponses.find { it.id == videoId }

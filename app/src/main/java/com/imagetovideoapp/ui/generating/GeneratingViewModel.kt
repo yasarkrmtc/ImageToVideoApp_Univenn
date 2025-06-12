@@ -44,10 +44,9 @@ class GeneratingViewModel @Inject constructor(
                                 _errorMessage.value = result.exception.message
                                 isSuccess = true
                             }
+
                             else -> {
-                                val errorMessage = Constants.VIDEO_GENERATION_FAILED
-                                _errorMessage.value = errorMessage
-                                isSuccess = false
+
                             }
                         }
                     }

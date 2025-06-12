@@ -8,4 +8,5 @@
     <string name="describe_your_video">Describe your video</string>
     <string name="prompt_optional">Prompt (Optional)</string>
     <string name="generate">Generate</string>
+    <string name="uploaded">Uploaded</string>
 </resources>
