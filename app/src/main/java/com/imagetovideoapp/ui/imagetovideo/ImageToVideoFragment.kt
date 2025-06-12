@@ -3,21 +3,17 @@ package com.imagetovideoapp.ui.imagetovideo
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SeekBar
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.imagetovideoapp.R
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentImageToVideoBinding
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.type.StatusEnum
-import com.imagetovideoapp.ui.home.HomeFragmentDirections
+import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -54,7 +50,7 @@ class ImageToVideoFragment :
                     }
                     is BaseResponse.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        showAlert(response.exception.message ?: "An unknown error occurred.")
+                        showAlert(response.exception.message ?: Constants.ALERT_UNKNOWN_ERROR_MESSAGE)
                     }
                 }
             }
@@ -63,7 +59,7 @@ class ImageToVideoFragment :
 
 
     private fun setupVideoView(videoUrl: String) {
-        val videoUri = Uri.parse(videoUrl)  // Parse the URL to URI
+        val videoUri = Uri.parse(videoUrl)
 
         binding.videoView.setVideoURI(videoUri)
         binding.videoView.setOnPreparedListener {
@@ -136,7 +132,7 @@ class ImageToVideoFragment :
     private fun formatTime(milliseconds: Int): String {
         val minutes = (milliseconds / 1000) / 60
         val seconds = (milliseconds / 1000) % 60
-        return String.format("%02d:%02d", minutes, seconds)
+        return String.format(Constants.TIME_FORMAT, minutes, seconds)
     }
 
     override fun onDestroyView() {

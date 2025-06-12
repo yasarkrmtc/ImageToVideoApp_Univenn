@@ -12,8 +12,6 @@ type Query {
     getUserVideos(status: StatusEnum): [Video!]!
 }
 
-# Required types for the exposed operations
-
 type PredictResponse {
     status: String
     video: Video
@@ -48,7 +46,6 @@ type TotalCredit {
     total: Int!
 }
 
-# Required enums
 
 enum StatusEnum {
     FAILED
@@ -60,9 +57,6 @@ enum StatusEnum {
 }
 
 
-# Required scalars
-"The javascript `Date` as string. Type represents date and time as the ISO Date string."
 scalar DateTime
 
-"The `Upload` scalar type represents a file upload."
 scalar Upload

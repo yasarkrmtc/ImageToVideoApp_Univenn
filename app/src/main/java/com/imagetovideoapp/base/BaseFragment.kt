@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.imagetovideoapp.utils.Constants
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -33,13 +34,12 @@ open class BaseFragment<VB : ViewBinding?>(
     fun showAlert(message: String) {
         activity?.let { context ->
             val dialog = AlertDialog.Builder(context)
-                .setTitle("Error")
+                .setTitle(Constants.ERROR)
                 .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
+                .setPositiveButton(Constants.OK) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
-
             dialog.show()
         }
     }

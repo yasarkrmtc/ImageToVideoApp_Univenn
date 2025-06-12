@@ -42,7 +42,7 @@ class ImageToVideoViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                _userVideos.emit(BaseResponse.Error(e)) // In case of error, emit an error response
+                _userVideos.emit(BaseResponse.Error(e))
             }
         }
     }

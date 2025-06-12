@@ -3,6 +3,7 @@ package com.imagetovideoapp.di
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.network.okHttpClient
 import com.imagetovideoapp.utils.CustomHttpLogger
+import com.imagetovideoapp.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://videoai-api.univenn.com/graphql"
-    private const val BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtYjdveDdubDA4cmMxM3lkM2Q4eTFwZTUiLCJpYXQiOjE3NDg0MjEzOTcsImV4cCI6MTc3OTk3ODk5N30.etHVx6wnnkEsaHdiGErXDOEC7KsH3lr52NtkTGk2Uvg"
-
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
@@ -29,7 +27,7 @@ object NetworkModule {
             .addInterceptor(logging)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                    .addHeader(Constants.AUTHORIZATION_HEADER, "${Constants.BEARER_PREFIX}${Constants.BEARER_TOKEN}")
                     .build()
                 chain.proceed(request)
             }
@@ -40,9 +38,8 @@ object NetworkModule {
     @Singleton
     fun provideApolloClient(okHttpClient: OkHttpClient): ApolloClient {
         return ApolloClient.Builder()
-            .serverUrl(BASE_URL)
+            .serverUrl(Constants.BASE_URL)
             .okHttpClient(okHttpClient)
             .build()
     }
-
 }

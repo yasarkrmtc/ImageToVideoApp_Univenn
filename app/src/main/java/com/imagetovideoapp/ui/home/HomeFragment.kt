@@ -3,11 +3,7 @@ package com.imagetovideoapp.ui.home
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,8 +12,8 @@ import clickWithDebounce
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentHomeBinding
 import com.imagetovideoapp.domain.state.BaseResponse
+import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,7 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun initListeners() {
         binding.uploadArea.clickWithDebounce {
-            pickImageLauncher.launch("image/*")
+            pickImageLauncher.launch(Constants.IMAGE_PICKER_TYPE)
         }
 
         binding.generateButton.setOnClickListener {
@@ -61,13 +57,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     }
                     is BaseResponse.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        showAlert(response.exception.message ?: "An unknown error occurred.")
+                        showAlert(response.exception.message ?: Constants.ALERT_UNKNOWN_ERROR_MESSAGE)
                     }
                 }
             }
         }
     }
-
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {

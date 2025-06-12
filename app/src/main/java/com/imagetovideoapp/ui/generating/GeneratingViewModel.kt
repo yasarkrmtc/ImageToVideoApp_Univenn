@@ -1,11 +1,11 @@
 package com.imagetovideoapp.ui.generating
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.repository.StatusUiModel
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.domain.usecase.GetPredictStatusUseCase
+import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +22,6 @@ class GeneratingViewModel @Inject constructor(
     val progress: SharedFlow<BaseResponse<StatusUiModel>> = _progress
 
     fun startPolling(videoId: String) {
-        Log.e("GeneratingViewModel", "Polling started for video ID: $videoId")
         viewModelScope.launch {
             _progress.emit(BaseResponse.Loading) // Emit loading state initially
 
@@ -32,11 +31,10 @@ class GeneratingViewModel @Inject constructor(
                     getPredictStatusUseCase(videoId).collect { result ->
                         when (result) {
                             is BaseResponse.Success -> {
-                                Log.e("qqqqqqq333",result.data.toString())
                                 val status = result.data.status
                                 val progress = result.data.progress
                                 _progress.emit(BaseResponse.Success(result.data))
-                                if (status == "SUCCEEDED") {
+                                if (status == Constants.SUCCEEDED_STATUS) {
                                     isSuccess = true
                                 }
                                 if (progress in 0..100) {
@@ -48,7 +46,7 @@ class GeneratingViewModel @Inject constructor(
                                 isSuccess = true
                             }
                             else -> {
-                                val errorMessage = "Video generation failed"
+                                val errorMessage = Constants.VIDEO_GENERATION_FAILED
                                 _progress.emit(BaseResponse.Error(Exception(errorMessage)))
                                 isSuccess = true
                             }

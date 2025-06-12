@@ -44,11 +44,4 @@ object RetrofitInstance {
             }
             .build()
     }
-    /*
-    @Provides
-    @Singleton
-    fun provideRepository(apiService: ServiceInterface): ServiceRepositoryImpl {
-        return ServiceRepositoryImpl(apiService)
-    }
-     */
 }

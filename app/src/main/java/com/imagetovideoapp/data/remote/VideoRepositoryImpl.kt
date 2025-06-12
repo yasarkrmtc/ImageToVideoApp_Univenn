@@ -12,6 +12,7 @@ import com.imagetovideoapp.domain.repository.UserVideo
 import com.imagetovideoapp.domain.repository.VideoGenerationResult
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.type.StatusEnum
+import com.imagetovideoapp.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -49,7 +50,7 @@ class VideoRepositoryImpl @Inject constructor(
         if (response.hasErrors()) {
             val errorMessage = response.errors?.get(0)?.message
 
-            emit(BaseResponse.Error(Exception("Hata oluştu: $errorMessage")))
+            emit(BaseResponse.Error(Exception("${Constants.ERROR_MESSAGE_PREFIX} $errorMessage")))
         } else {
             val video = response.data?.img2Video?.video
             val status = response.data?.img2Video?.status
@@ -64,7 +65,7 @@ class VideoRepositoryImpl @Inject constructor(
                     )
                 )
             } else {
-                emit(BaseResponse.Error(Exception("Video oluşturulamadı")))
+                emit(BaseResponse.Error(Exception(Constants.VIDEO_CREATION_FAILED)))
             }
         }
 
@@ -82,7 +83,7 @@ class VideoRepositoryImpl @Inject constructor(
             val response = apolloClient.query(GetPredictStatusQuery(videoId)).execute()
             if (response.hasErrors()) {
                 val errorMessage = response.errors?.get(0)?.message
-                emit(BaseResponse.Error(Exception("Hata oluştu: $errorMessage")))
+                emit(BaseResponse.Error(Exception("${Constants.ERROR_MESSAGE_PREFIX} $errorMessage")))
             } else {
                 val statusData = response.data?.getPredictStatus
 
@@ -92,13 +93,13 @@ class VideoRepositoryImpl @Inject constructor(
                             StatusUiModel(
                                 progress = statusData.progress,
                                 status = statusData.status.name,
-                                videoUrl = "https://videoai-api.univenn.com/output/$videoId.mp4",
-                                description = "Video oluşturuluyor..."
+                                videoUrl = "${Constants.VIDEO_URL_BASE}$videoId.mp4",
+                                description = Constants.VIDEO_CREATING_DESCRIPTION
                             )
                         )
                     )
                 } else {
-                    emit(BaseResponse.Error(Exception("Status bulunamadı")))  // Hata durumu
+                    emit(BaseResponse.Error(Exception(Constants.STATUS_NOT_FOUND)))
                 }
             }
         }.onStart {
@@ -117,7 +118,7 @@ class VideoRepositoryImpl @Inject constructor(
 
             if (response.hasErrors()) {
                 val errorMessage = response.errors?.get(0)?.message
-                emit(BaseResponse.Error(Exception("Hata oluştu: $errorMessage")))
+                emit(BaseResponse.Error(Exception("${Constants.ERROR_MESSAGE_PREFIX} $errorMessage")))
             } else {
                 val videos = response.data?.getUserVideos
 
@@ -135,7 +136,7 @@ class VideoRepositoryImpl @Inject constructor(
                         }
                     ))
                 } else {
-                    emit(BaseResponse.Error(Exception("Videolar alınamadı")))
+                    emit(BaseResponse.Error(Exception(Constants.VIDEOS_FETCH_FAILED)))
                 }
             }
         }.onStart {
