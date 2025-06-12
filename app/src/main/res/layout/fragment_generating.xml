@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Generating Video"
+        android:text="@string/generating_video"
         android:textColor="@color/white"
         android:textSize="@dimen/size12"
         android:textStyle="bold"
@@ -20,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.457" />
+        app:layout_constraintVertical_bias="0.457"
+        tools:ignore="SpUsage" />
 
     <TextView
         android:id="@+id/textView2"
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size4"
         android:gravity="center_horizontal"
-        android:text="It may take a while, please a patient In progress"
+        android:text="@string/it_may_take_a_while_please_a_patient_in_progress"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"

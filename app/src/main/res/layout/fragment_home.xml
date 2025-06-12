@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tap Here to Upload Image"
+                android:text="@string/tap_here_to_upload_image"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Prompt (Optional)"
+            android:text="@string/prompt_optional"
             android:textColor="#AABBCD"
             android:textSize="14sp" />
 
@@ -68,7 +68,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/outlined_background"
             android:gravity="top|start"
-            android:hint="Describe your video"
+            android:hint="@string/describe_your_video"
             android:inputType="textMultiLine"
             android:maxLines="5"
             android:padding="12dp"
@@ -83,7 +83,7 @@
             android:backgroundTint="#30E3CA"
             android:drawableEnd="@drawable/star_icon"
             android:drawablePadding="8dp"
-            android:text="Generate"
+            android:text="@string/generate"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold" />
