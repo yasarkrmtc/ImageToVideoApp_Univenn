@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
 import clickWithDebounce
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentHomeBinding
-import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,20 +45,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.viewState.collect { response ->
-                when (response) {
-                    is BaseResponse.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is BaseResponse.Success -> {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect { viewState ->
+                    if (viewState.errorMessage != null) {
                         binding.progressBar.visibility = View.GONE
-                        val videoGenerationResult = response.data
-                        val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoGenerationResult.id)
+                        val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment("cmbrz6b1l3dgz2mn7trxmff1o")
                         findNavController().navigate(action)
-                    }
-                    is BaseResponse.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showAlert(response.exception.message ?: Constants.ALERT_UNKNOWN_ERROR_MESSAGE)
+                        //showAlert(response.exception.message ?: Constants.ALERT_UNKNOWN_ERROR_MESSAGE)
+                    } else {
+                        viewState.isLoading?.let {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        viewState.item?.let { demoResponses ->
+                            binding.progressBar.visibility = View.GONE
+                            val videoGenerationResult = demoResponses
+                            val action = HomeFragmentDirections.actionHomeFragmentToGeneratingFragment(videoGenerationResult.id)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }

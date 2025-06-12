@@ -13,6 +13,7 @@ import com.imagetovideoapp.domain.repository.VideoGenerationResult
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.type.StatusEnum
 import com.imagetovideoapp.utils.Constants
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -76,7 +77,7 @@ class VideoRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getPredictStatus(videoId: String): Flow<BaseResponse<StatusUiModel>> =
+    /*override suspend fun getPredictStatus(videoId: String): Flow<BaseResponse<StatusUiModel>> =
         flow {
             emit(BaseResponse.Loading)
 
@@ -101,6 +102,32 @@ class VideoRepositoryImpl @Inject constructor(
                 } else {
                     emit(BaseResponse.Error(Exception(Constants.STATUS_NOT_FOUND)))
                 }
+            }
+        }.onStart {
+            emit(BaseResponse.Loading)
+        }.catch { e ->
+            emit(BaseResponse.Error(e))
+        } */
+    private var progress = 0
+    override suspend fun getPredictStatus(videoId: String): Flow<BaseResponse<StatusUiModel>> =
+        flow {
+            emit(BaseResponse.Loading)
+            progress += 5
+            delay(10)
+
+            val status = if (progress >= 100) "Completed" else "Processing"
+
+            val statusUiModel = StatusUiModel(
+                progress = progress,
+                status = status,
+                videoUrl = "${Constants.VIDEO_URL_BASE}$videoId.mp4",
+                description = Constants.VIDEO_CREATING_DESCRIPTION
+            )
+
+            emit(BaseResponse.Success(statusUiModel))
+
+            if (progress >= 100) {
+                progress = 0
             }
         }.onStart {
             emit(BaseResponse.Loading)

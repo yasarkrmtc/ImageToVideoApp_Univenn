@@ -1,5 +1,6 @@
 package com.imagetovideoapp.ui.generating
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.repository.StatusUiModel
@@ -9,6 +10,7 @@ import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,44 +20,41 @@ class GeneratingViewModel @Inject constructor(
     private val getPredictStatusUseCase: GetPredictStatusUseCase
 ) : ViewModel() {
 
-    private val _progress = MutableSharedFlow<BaseResponse<StatusUiModel>>()
-    val progress: SharedFlow<BaseResponse<StatusUiModel>> = _progress
+    private val _progress = MutableStateFlow(0)
+    val progress: SharedFlow<Int> = _progress
+
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: SharedFlow<String?> = _errorMessage
 
     fun startPolling(videoId: String) {
         viewModelScope.launch {
-            _progress.emit(BaseResponse.Loading) // Emit loading state initially
-
             try {
                 var isSuccess = false
                 while (!isSuccess) {
                     getPredictStatusUseCase(videoId).collect { result ->
                         when (result) {
                             is BaseResponse.Success -> {
-                                val status = result.data.status
-                                val progress = result.data.progress
-                                _progress.emit(BaseResponse.Success(result.data))
-                                if (status == Constants.SUCCEEDED_STATUS) {
+                                _progress.value = result.data.progress
+                                if (result.data.progress == 100){
                                     isSuccess = true
-                                }
-                                if (progress in 0..100) {
-                                    _progress.emit(BaseResponse.Success(result.data))
                                 }
                             }
                             is BaseResponse.Error -> {
-                                _progress.emit(BaseResponse.Error(result.exception))
+                                _errorMessage.value = result.exception.message
                                 isSuccess = true
                             }
                             else -> {
                                 val errorMessage = Constants.VIDEO_GENERATION_FAILED
-                                _progress.emit(BaseResponse.Error(Exception(errorMessage)))
-                                isSuccess = true
+                                _errorMessage.value = errorMessage
+                                isSuccess = false
                             }
                         }
                     }
                     delay(1000)
                 }
             } catch (e: Exception) {
-                _progress.emit(BaseResponse.Error(e))
+                _errorMessage.value = e.message
             }
         }
     }

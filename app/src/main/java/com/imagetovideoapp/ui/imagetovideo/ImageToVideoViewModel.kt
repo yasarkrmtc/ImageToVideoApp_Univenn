@@ -1,49 +1,56 @@
 package com.imagetovideoapp.ui.imagetovideo
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imagetovideoapp.domain.repository.UserVideo
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.domain.usecase.GetUserVideosUseCase
 import com.imagetovideoapp.type.StatusEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ImageToVideoViewModel @Inject constructor(
-    application: Application,
     private val getUserVideosUseCase: GetUserVideosUseCase
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
-    private val _userVideos = MutableSharedFlow<BaseResponse<List<UserVideo>>>()
-    val userVideos: SharedFlow<BaseResponse<List<UserVideo>>> = _userVideos
+    private val _viewState = MutableStateFlow(UserVideosViewState())
+    val viewState = _viewState.asStateFlow()
 
     fun fetchUserVideos(status: StatusEnum? = null) {
         viewModelScope.launch {
-            _userVideos.emit(BaseResponse.Loading)
-
-            try {
                 getUserVideosUseCase(status).collect { result ->
+                    Log.e("qqqqqqq6666",result.toString())
                     when (result) {
+                        is BaseResponse.Loading -> _viewState.update { viewState ->
+                            viewState.copy(
+                                isLoading = true, errorMessage = null
+                            )
+                        }
                         is BaseResponse.Success -> {
-                            _userVideos.emit(BaseResponse.Success(result.data))
+                            _viewState.update { viewState ->
+                                viewState.copy(
+                                    isLoading = false,
+                                    errorMessage = null,
+                                    itemList = result.data
+                                )
+                            }
                         }
-
                         is BaseResponse.Error -> {
-                            _userVideos.emit(BaseResponse.Error(result.exception))
-                        }
-
-                        else -> {
+                            _viewState.update { viewState ->
+                                viewState.copy(
+                                    isLoading = false, errorMessage = result.exception.message
+                                )
+                            }
                         }
                     }
                 }
-            } catch (e: Exception) {
-                _userVideos.emit(BaseResponse.Error(e))
-            }
         }
     }
+
 }
+
