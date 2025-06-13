@@ -50,7 +50,6 @@ class VideoRepositoryImpl @Inject constructor(
 
         if (response.hasErrors()) {
             val errorMessage = response.errors?.get(0)?.message
-
             emit(BaseResponse.Error(Exception("${Constants.ERROR_MESSAGE_PREFIX} $errorMessage")))
         } else {
             val video = response.data?.img2Video?.video
@@ -75,7 +74,6 @@ class VideoRepositoryImpl @Inject constructor(
     }.catch { e ->
         emit(BaseResponse.Error(e))
     }
-
 
     override suspend fun getPredictStatus(videoId: String): Flow<BaseResponse<StatusUiModel>> =
         flow {
@@ -108,7 +106,6 @@ class VideoRepositoryImpl @Inject constructor(
         }.catch { e ->
             emit(BaseResponse.Error(e))
         }
-
 
     override suspend fun getUserVideos(status: StatusEnum?): Flow<BaseResponse<List<UserVideo>>> =
         flow {
@@ -145,5 +142,4 @@ class VideoRepositoryImpl @Inject constructor(
         }.catch { e ->
             emit(BaseResponse.Error(e))
         }
-
 }

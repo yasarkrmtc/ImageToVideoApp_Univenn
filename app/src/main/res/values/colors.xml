@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="homeNavigationBarColor">#141D29</color>
+    <color name="describeHintColor">#AAAAAA</color>
+    <color name="buttonColor">#60EFFF</color>
+    <color name="promptTextColor">#AABBCD</color>
+    <color name="imageToVideoPageBackgroundColor">#101417</color>
+
+
+
+
+
+
+
 </resources>

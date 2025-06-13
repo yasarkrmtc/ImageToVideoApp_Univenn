@@ -4,12 +4,10 @@ import com.apollographql.apollo.ApolloClient
 import com.imagetovideoapp.BuildConfig
 import com.imagetovideoapp.data.remote.DummyVideRepository
 import com.imagetovideoapp.data.remote.VideoRepositoryImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

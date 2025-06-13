@@ -1,15 +1,12 @@
 package com.imagetovideoapp.ui.generating
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentGeneratingBinding
-import com.imagetovideoapp.domain.state.BaseResponse
-import com.imagetovideoapp.ui.home.HomeFragmentDirections
 import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

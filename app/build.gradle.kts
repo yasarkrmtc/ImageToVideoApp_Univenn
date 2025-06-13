@@ -42,7 +42,7 @@ android {
         debug {
             buildConfigField("boolean", "USE_FAKE_REPO", "false")
         }
-        create("myTest") {
+        create("dummyTest") {
             initWith(getByName("debug"))
             manifestPlaceholders["hostName"] = "internal.example.com"
             applicationIdSuffix = ".debugStaging"
@@ -115,12 +115,12 @@ dependencies {
     implementation("io.coil-kt:coil:2.4.0")
 
 
-    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.apollographql.apollo:apollo-runtime")
     implementation("com.apollographql.apollo:apollo-api")
 
+    implementation ("androidx.media3:media3-exoplayer:1.0.0-beta01")
+    implementation ("androidx.media3:media3-ui:1.0.0-beta01")
 
 }
-

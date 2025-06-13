@@ -13,12 +13,11 @@
         <clip>
             <shape android:shape="rectangle">
                 <gradient
-                    android:startColor="#30FF86"
-                    android:endColor="#60EFFF"
+                    android:startColor="#60EFFF"
+                    android:endColor="#30FF86"
                     android:angle="0"/>
                 <corners android:radius="3dp" />
             </shape>
         </clip>
     </item>
-
 </layer-list>

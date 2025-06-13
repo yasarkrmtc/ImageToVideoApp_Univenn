@@ -1,7 +1,6 @@
 package com.imagetovideoapp.ui.home
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.state.BaseResponse
@@ -33,8 +32,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is BaseResponse.Success -> {
-                        Log.e("ress","success : ${result.data}")
-
                         _viewState.update { viewState ->
                             viewState.copy(
                                 isLoading = false,
@@ -45,7 +42,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is BaseResponse.Error -> {
-                        Log.e("ress","errorGeldi : ${result.exception.message}")
                         _viewState.update { viewState ->
                             viewState.copy(
                                 isLoading = false, errorMessage = result.exception.message
@@ -56,7 +52,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
     fun setSelectedImage(imageUri: Uri) {
         _viewState.update {
@@ -75,4 +70,3 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
-
