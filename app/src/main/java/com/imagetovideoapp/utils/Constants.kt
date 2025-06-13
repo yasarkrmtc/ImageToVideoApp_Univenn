@@ -34,4 +34,6 @@ object Constants {
     const val ERROR_SHARE_VIDEO_TEXT = "Error sharing video"
     const val ERROR_DOWNLOAD_VIDEO_TEXT = "Video indirilemedi"
     const val VIDEO_DOWNLOADING_TEXT = "Video indiriliyor..."
+    const val PLEASE_UPLOAD_IMAGE_FIRST = "Please upload an image first"
+
 }

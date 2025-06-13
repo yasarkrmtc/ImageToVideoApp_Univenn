@@ -3,6 +3,7 @@ package com.imagetovideoapp.ui.home
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -39,6 +40,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 val prompt = promptEditText.text?.toString()
                 viewModel.viewState.value.selectedImage?.let {
                     viewModel.generateVideo(it, prompt)
+                } ?: run {
+                    showToast(Constants.PLEASE_UPLOAD_IMAGE_FIRST)
                 }
             }
             closeButton.clickWithDebounce {
@@ -107,4 +110,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 viewModel.setSelectedImage(it)
             }
         }
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 }
