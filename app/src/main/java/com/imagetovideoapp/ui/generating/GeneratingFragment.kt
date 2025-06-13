@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.imagetovideoapp.base.BaseFragment
 import com.imagetovideoapp.databinding.FragmentGeneratingBinding
+import com.imagetovideoapp.type.StatusEnum
 import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,7 +32,11 @@ class GeneratingFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.progress.collect { response ->
                 binding.progressBar.progress = response
-                if (response == 100){
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.status.collect { response ->
+                if (response == StatusEnum.SUCCEEDED.name){
                     val action = GeneratingFragmentDirections.actionGeneratingFragmentToImageToVideoFragment(videoId!!)
                     findNavController().navigate(action)
                 }

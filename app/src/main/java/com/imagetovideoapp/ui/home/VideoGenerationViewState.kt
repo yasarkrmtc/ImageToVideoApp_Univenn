@@ -1,11 +1,11 @@
 package com.imagetovideoapp.ui.home
 
-import android.net.Uri
+import android.graphics.Bitmap
 import com.imagetovideoapp.domain.repository.VideoGenerationResult
 
 data class VideoGenerationViewState (
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val item: VideoGenerationResult? = null,
-    val selectedImage : Uri? = null
+    val selectedImage : Bitmap? = null
 )

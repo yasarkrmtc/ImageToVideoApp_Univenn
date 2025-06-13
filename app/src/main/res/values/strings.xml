@@ -3,7 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="generating_video">Generating Video</string>
-    <string name="it_may_take_a_while_please_a_patient_in_progress">It may take a while, please a patientnIn progress</string>
+    <string name="it_may_take_a_while_please_a_patient_in_progress">It may take a while, please a patient\nIn progress</string>
     <string name="tap_here_to_upload_image">Tap Here to Upload Image</string>
     <string name="describe_your_video">Describe your video</string>
     <string name="prompt_optional">Prompt (Optional)</string>

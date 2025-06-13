@@ -1,8 +1,11 @@
 package com.imagetovideoapp.ui.home
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -19,6 +22,7 @@ import com.imagetovideoapp.databinding.FragmentHomeBinding
 import com.imagetovideoapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.InputStream
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -66,6 +70,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         binding.apply {
                             closeButton.visibility = View.VISIBLE
                             checkIcon.visibility = View.VISIBLE
+                            val layoutParams = binding.uploadImage.layoutParams
+                            layoutParams.width = dpToPx(40)
+                            layoutParams.height = dpToPx(40)
+                            binding.uploadImage.layoutParams = layoutParams
                             uploadImage.load(selectedImage)
                             uploadText.apply {
                                 text = getText(R.string.uploaded)
@@ -77,6 +85,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                             ContextCompat.getDrawable(requireContext(), R.drawable.outlined_background)
 
                         binding.apply {
+                            val layoutParams = binding.uploadImage.layoutParams
+                            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                            binding.uploadImage.layoutParams = layoutParams
                             closeButton.visibility = View.GONE
                             checkIcon.visibility = View.GONE
                             uploadImage.load(R.drawable.upload_icon)
@@ -107,10 +119,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                viewModel.setSelectedImage(it)
+                val resizedBitmap = resizeImage(it)
+
+                resizedBitmap?.let { bitmap ->
+                    viewModel.setSelectedImage(bitmap)
+                }
             }
         }
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
+
+    private fun resizeImage(uri: Uri): Bitmap? {
+        val inputStream: InputStream? = context?.contentResolver?.openInputStream(uri)
+        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+
+        val width = originalBitmap.width
+        val height = originalBitmap.height
+
+        if (width == height) {
+            return Bitmap.createScaledBitmap(originalBitmap, 720, 720, false)
+        }
+
+        if (width > height) {
+            return Bitmap.createScaledBitmap(originalBitmap, 1280, 720, false)
+        }
+
+        if (height > width) {
+            return Bitmap.createScaledBitmap(originalBitmap, 720, 1280, false)
+        }
+
+        return null
     }
 }

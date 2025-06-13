@@ -1,15 +1,12 @@
 package com.imagetovideoapp.ui.generating
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imagetovideoapp.domain.repository.StatusUiModel
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.domain.usecase.GetPredictStatusUseCase
-import com.imagetovideoapp.utils.Constants
+import com.imagetovideoapp.type.StatusEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -23,6 +20,8 @@ class GeneratingViewModel @Inject constructor(
     private val _progress = MutableStateFlow(0)
     val progress: SharedFlow<Int> = _progress
 
+    private val _status = MutableStateFlow("")
+    val status: SharedFlow<String> = _status
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: SharedFlow<String?> = _errorMessage
@@ -36,7 +35,8 @@ class GeneratingViewModel @Inject constructor(
                         when (result) {
                             is BaseResponse.Success -> {
                                 _progress.value = result.data.progress
-                                if (result.data.progress == 100){
+                                _status.value = result.data.status
+                                if (result.data.status == StatusEnum.SUCCEEDED.name){
                                     isSuccess = true
                                 }
                             }

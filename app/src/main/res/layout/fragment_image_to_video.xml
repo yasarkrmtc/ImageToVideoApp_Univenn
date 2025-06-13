@@ -50,10 +50,12 @@
     <androidx.media3.ui.PlayerView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size125"
-        android:layout_marginTop="@dimen/size10"
+        android:layout_height="@dimen/size155"
+        android:layout_marginTop="@dimen/size25"
         android:layout_marginStart="@dimen/size6"
         android:layout_marginEnd="@dimen/size6"
+        app:resize_mode="fill"
+        app:use_controller="false"
         app:layout_constraintBottom_toTopOf="@+id/videoDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -70,7 +72,6 @@
         android:layout_marginStart="@dimen/size18"
         android:gravity="start"
         android:lineSpacingExtra="@dimen/size2"
-        android:text="@string/audrey_hepburn_photo_professional_movie_professional_picture_ultra_detailed_ultra_realistic_cinematic_sharp_focus"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/font_size_14"
         app:layout_constraintBottom_toTopOf="@+id/mediaControls"
@@ -85,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size8"
         android:layout_marginEnd="@dimen/size8"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,9 +96,10 @@
 
         <ImageButton
             android:id="@+id/playPauseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/pause_icon" />
 
         <SeekBar
@@ -106,7 +108,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size4"
             android:layout_marginEnd="@dimen/size4"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:secondaryProgressTint="@color/white"
+            android:thumbTint="@color/white"
+            android:progressTint="@color/white"/>
+
 
         <TextView
             android:id="@+id/timeStamp"

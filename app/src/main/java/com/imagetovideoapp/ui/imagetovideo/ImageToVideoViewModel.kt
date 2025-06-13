@@ -1,6 +1,5 @@
 package com.imagetovideoapp.ui.imagetovideo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.state.BaseResponse
@@ -24,7 +23,6 @@ class ImageToVideoViewModel @Inject constructor(
     fun fetchUserVideos(status: StatusEnum? = null) {
         viewModelScope.launch {
                 getUserVideosUseCase(status).collect { result ->
-                    Log.e("qqqqqqq6666",result.toString())
                     when (result) {
                         is BaseResponse.Loading -> _viewState.update { viewState ->
                             viewState.copy(
@@ -51,6 +49,4 @@ class ImageToVideoViewModel @Inject constructor(
                 }
         }
     }
-
 }
-

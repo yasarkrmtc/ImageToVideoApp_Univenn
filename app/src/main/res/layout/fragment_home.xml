@@ -35,16 +35,17 @@
         <LinearLayout
             android:id="@+id/uploadArea"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size45"
+            android:layout_height="wrap_content"
             android:background="@drawable/outlined_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/size6">
+            android:paddingVertical="@dimen/size8"
+            android:paddingHorizontal="@dimen/size6">
 
             <ImageView
                 android:id="@+id/upload_image"
-                android:layout_width="@dimen/size24"
-                android:layout_height="@dimen/size24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:src="@drawable/upload_icon" />
 
@@ -52,7 +53,6 @@
                 android:id="@+id/checkIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginStart="@dimen/size4"
                 app:srcCompat="@drawable/check_icon" />
 
@@ -65,14 +65,23 @@
                 android:layout_marginStart="@dimen/size10"
                 android:textSize="@dimen/font_size_14"
                 android:textStyle="bold" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="end"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/closeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/close_icon"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/closeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size13"
-                android:layout_marginBottom="@dimen/size13"
-                app:srcCompat="@drawable/close_icon" />
+
         </LinearLayout>
 
         <TextView
@@ -96,22 +105,41 @@
             android:padding="@dimen/size7"
             android:textColor="@color/white"
             android:textColorHint="@color/describeHintColor" />
-
-        <Button
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/generateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size8"
-            android:backgroundTint="@color/buttonColor"
-            android:text="@string/generate"
-            android:textColor="@color/black"
-            android:textSize="@dimen/font_size_16"
-            android:textStyle="bold"
-            android:drawableEnd="@drawable/star_icon"
-            android:drawablePadding="@dimen/size4"
-            android:gravity="center_vertical|center_horizontal" />
+            app:cardCornerRadius="@dimen/size4"
+            android:layout_marginTop="@dimen/size6"
+            android:elevation="0dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/buttonColor"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/size6"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/generate"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_14"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size4"
+                    android:src="@drawable/star_icon"
+                    />
+            </LinearLayout>
 
-
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 

@@ -1,7 +1,9 @@
 package com.imagetovideoapp.data.remote
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.util.Log
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.DefaultUpload
 import com.apollographql.apollo.api.Optional
 import com.imagetovideoapp.GetPredictStatusQuery
 import com.imagetovideoapp.GetUserVideosQuery
@@ -13,13 +15,12 @@ import com.imagetovideoapp.domain.repository.VideoGenerationResult
 import com.imagetovideoapp.domain.state.BaseResponse
 import com.imagetovideoapp.type.StatusEnum
 import com.imagetovideoapp.utils.Constants
-import kotlinx.coroutines.delay
+import com.imagetovideoapp.utils.FileUtils.bitmapToFile
+import com.imagetovideoapp.utils.FileUtils.createUploadFromFile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import okio.source
-import java.io.File
 import javax.inject.Inject
 
 class VideoRepositoryImpl @Inject constructor(
@@ -27,20 +28,15 @@ class VideoRepositoryImpl @Inject constructor(
 ) : VideoRepository {
 
     override suspend fun startVideoGeneration(
-        imageFile: File,
-        prompt: String?
+        bitmap: Bitmap,
+        prompt: String?,
+        context: Context
     ): Flow<BaseResponse<VideoGenerationResult>> = flow {
         emit(BaseResponse.Loading)
-        val upload = DefaultUpload.Builder()
-            .fileName(imageFile.name)
-            .contentLength(imageFile.length())
-            .content { sink ->
-                imageFile.source().use { source ->
-                    sink.buffer.writeAll(source)
-                    sink.flush()
-                }
-            }
-            .build()
+
+        val file = bitmapToFile(bitmap, "image.jpg", context)
+
+        val upload = createUploadFromFile(file)
 
         val mutation = Img2VideoMutation(
             image = upload,
@@ -56,14 +52,12 @@ class VideoRepositoryImpl @Inject constructor(
             val status = response.data?.img2Video?.status
 
             if (video != null && status != null) {
-                emit(
-                    BaseResponse.Success(
-                        VideoGenerationResult(
-                            id = video.id,
-                            status = video.status.name
-                        )
+                emit(BaseResponse.Success(
+                    VideoGenerationResult(
+                        id = video.id,
+                        status = video.status.name
                     )
-                )
+                ))
             } else {
                 emit(BaseResponse.Error(Exception(Constants.VIDEO_CREATION_FAILED)))
             }
@@ -74,6 +68,7 @@ class VideoRepositoryImpl @Inject constructor(
     }.catch { e ->
         emit(BaseResponse.Error(e))
     }
+
 
     override suspend fun getPredictStatus(videoId: String): Flow<BaseResponse<StatusUiModel>> =
         flow {

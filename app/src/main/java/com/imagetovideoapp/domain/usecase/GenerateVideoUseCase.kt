@@ -1,7 +1,7 @@
 package com.imagetovideoapp.domain.usecase
 
 import android.content.Context
-import android.net.Uri
+import android.graphics.Bitmap
 import com.imagetovideoapp.domain.repository.VideoRepository
 import com.imagetovideoapp.domain.repository.VideoGenerationResult
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -13,8 +13,7 @@ class GenerateVideoUseCase @Inject constructor(
     private val repository: VideoRepository,
     @ApplicationContext private val context: Context
 ) {
-    suspend operator fun invoke(imageUri: Uri, prompt: String?): Flow<BaseResponse<VideoGenerationResult>> {
-        val file = com.imagetovideoapp.utils.FileUtils.getFileFromUri(context, imageUri)
-        return repository.startVideoGeneration(file, prompt)
+    suspend operator fun invoke(bitmap: Bitmap, prompt: String?): Flow<BaseResponse<VideoGenerationResult>> {
+        return repository.startVideoGeneration(bitmap, prompt,context)
     }
 }

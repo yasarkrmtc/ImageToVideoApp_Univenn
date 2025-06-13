@@ -1,6 +1,6 @@
 package com.imagetovideoapp.ui.home
 
-import android.net.Uri
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imagetovideoapp.domain.state.BaseResponse
@@ -21,9 +21,9 @@ class HomeViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(VideoGenerationViewState())
     val viewState = _viewState.asStateFlow()
 
-    fun generateVideo(imageUri: Uri, prompt: String?) {
+    fun generateVideo(bitmap: Bitmap, prompt: String?) {
         viewModelScope.launch {
-            generateVideoUseCase(imageUri, prompt).collect { result ->
+            generateVideoUseCase(bitmap, prompt).collect { result ->
                 when (result) {
                     is BaseResponse.Loading -> _viewState.update { viewState ->
                         viewState.copy(
@@ -53,9 +53,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedImage(imageUri: Uri) {
+    fun setSelectedImage(bitmap: Bitmap) {
         _viewState.update {
-            it.copy(selectedImage = imageUri)
+            it.copy(selectedImage = bitmap)
         }
     }
 

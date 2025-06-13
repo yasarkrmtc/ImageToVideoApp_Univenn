@@ -1,5 +1,7 @@
 package com.imagetovideoapp.data.remote
 
+import android.content.Context
+import android.graphics.Bitmap
 import com.apollographql.apollo.ApolloClient
 import com.imagetovideoapp.domain.repository.VideoRepository
 import com.imagetovideoapp.domain.repository.StatusUiModel
@@ -23,8 +25,9 @@ class DummyVideRepository @Inject constructor(
 ) : VideoRepository {
 
     override suspend fun startVideoGeneration(
-        imageFile: File,
-        prompt: String?
+        bitmap: Bitmap,
+        prompt: String?,
+        context: Context
     ): Flow<BaseResponse<VideoGenerationResult>> = flow {
         emit(BaseResponse.Loading)
         delay(1000)
@@ -44,11 +47,11 @@ class DummyVideRepository @Inject constructor(
             progress += 5
             delay(10)
 
-            val status = if (progress >= 100) Constants.STATUS_COMPLETED else Constants.STATUS_PROCESSING
+            val status = if (progress >= 100) StatusEnum.SUCCEEDED.name else Constants.STATUS_PROCESSING
 
             val statusUiModel = StatusUiModel(
                 progress = progress,
-                status = status,
+                status = StatusEnum.SUCCEEDED.name,
                 videoUrl = "${Constants.VIDEO_URL_BASE}$videoId.mp4",
                 description = Constants.VIDEO_CREATING_DESCRIPTION
             )
