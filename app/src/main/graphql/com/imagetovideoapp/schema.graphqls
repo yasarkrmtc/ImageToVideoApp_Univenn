@@ -1,0 +1,62 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    img2Video(image: Upload, prompt: String): PredictResponse!
+}
+
+type Query {
+    getPredictStatus(videoId: String!): StatusCheckResponse!
+    getUserVideos(status: StatusEnum): [Video!]!
+}
+
+type PredictResponse {
+    status: String
+    video: Video
+}
+
+type StatusCheckResponse {
+    progress: Int!
+    status: StatusEnum!
+}
+
+type Video {
+    duration: Int
+    errorReason: String
+    id: ID!
+    inputImageUrl: String
+    progressRatio: Int
+    prompt: String
+    status: StatusEnum!
+    thumbnailUrl: String
+    url: String
+    userId: String
+}
+
+type User {
+    id: ID!
+    totalCredit: TotalCredit!
+    videos: [Video!]!
+}
+
+type TotalCredit {
+    dailyCredit: Int!
+    total: Int!
+}
+
+
+enum StatusEnum {
+    FAILED
+    IN_QUE
+    PENDING
+    RUNNING
+    SUCCEEDED
+    THROTTLED
+}
+
+
+scalar DateTime
+
+scalar Upload

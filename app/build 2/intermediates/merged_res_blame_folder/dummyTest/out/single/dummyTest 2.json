@@ -1,0 +1,150 @@
+[
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_close_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/close_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_progress_bar_gradient.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/progress_bar_gradient.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_check_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/check_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_update_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/update_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/xml_backup_rules.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/layout_activity_main.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_start_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/start_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable-xxhdpi_background_home1.png.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable-xxhdpi/background_home1.png"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_star_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/star_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_card_background.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/card_background.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_background_home1.png.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/background_home1.png"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_outlined_background.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/outlined_background.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/navigation_nav_graph.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_upload_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/upload_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable-xhdpi_background_home1.png.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable-xhdpi/background_home1.png"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/layout_fragment_home.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_black_close_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/black_close_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_prompt_background.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/prompt_background.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.imagetovideoapp-main-53:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_pause_icon.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/pause_icon.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/xml_data_extraction_rules.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/layout_fragment_generating.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/layout/fragment_generating.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/layout_fragment_image_to_video.xml.flat",
+        "source": "com.imagetovideoapp-main-53:/layout/fragment_image_to_video.xml"
+    },
+    {
+        "merged": "com.imagetovideoapp-merged_res-51:/drawable_share_icon.png.flat",
+        "source": "com.imagetovideoapp-main-53:/drawable/share_icon.png"
+    }
+]

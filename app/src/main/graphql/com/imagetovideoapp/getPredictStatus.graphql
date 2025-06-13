@@ -1,0 +1,6 @@
+query GetPredictStatus($videoId: String!) {
+    getPredictStatus(videoId: $videoId) {
+        progress
+        status
+    }
+}

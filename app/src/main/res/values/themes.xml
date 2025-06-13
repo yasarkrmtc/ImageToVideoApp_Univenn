@@ -6,4 +6,6 @@
     </style>
 
     <style name="Theme.ImageToVideoApp" parent="Base.Theme.ImageToVideoApp" />
+
 </resources>
+
